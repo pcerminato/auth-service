@@ -1,0 +1,17 @@
+$kind: http-request
+name: Register
+method: POST
+url: '{{baseUrl}}/signin'
+order: 1000
+description: Register a new user account
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "user@example.com",
+      "password": "password123",
+      "name": "John Doe"
+    }

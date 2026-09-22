@@ -1,0 +1,11 @@
+$kind: http-request
+name: Get Profile
+method: GET
+url: '{{baseUrl}}/profile'
+order: 3000
+description: Get the authenticated user's profile (requires JWT)
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{accessToken}}'

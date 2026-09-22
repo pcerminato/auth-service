@@ -1,0 +1,10 @@
+$kind: collection
+name: Tickets Service
+description: API collection for the Tickets Service microservices platform. Covers the API Gateway and Auth Service endpoints.
+variables:
+  - key: baseUrl
+    value: 'http://localhost:3000'
+    description: Base URL for the API Gateway
+  - key: accessToken
+    value: ''
+    description: JWT access token obtained from the Login endpoint

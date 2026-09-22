@@ -1,0 +1,16 @@
+$kind: http-request
+name: Login
+method: POST
+url: '{{baseUrl}}/login'
+order: 2000
+description: Login and receive a JWT access token
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "user@example.com",
+      "password": "password123"
+    }

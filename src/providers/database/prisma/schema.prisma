@@ -1,0 +1,85 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  name      String   @db.VarChar(255)
+  role      Role     @default(USER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  tickets Ticket[]
+  events  Event[]
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ORGANIZER
+  ADMIN
+
+  @@map("role")
+}
+
+model Ticket {
+  id          String       @id @default(uuid()) @db.Uuid
+  eventId     String       @map("event_id") @db.Uuid
+  userId      String       @map("user_id") @db.Uuid
+  quantity    Int          @default(1)
+  totalPrice  Int          @map("total_price")
+  status      TicketStatus @default(PENDING)
+  ticketCode  String       @unique @map("ticket_code") @db.VarChar(20)
+  purchasedAt DateTime     @default(now()) @map("purchased_at")
+  checkedInAt DateTime?    @map("checked_in_at")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @default(now()) @map("updated_at")
+
+  event Event @relation(fields: [eventId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("tickets")
+}
+
+enum TicketStatus {
+  PENDING
+  CONFIRMED
+  CHECKED_IN
+  CANCELLED
+
+  @@map("ticket_status")
+}
+
+model Event {
+  id          String      @id @default(uuid()) @db.Uuid
+  title       String      @db.VarChar(255)
+  description String?
+  date        DateTime
+  location    String      @db.VarChar(255)
+  capacity    Int
+  price       Int         @default(0)
+  status      EventStatus @default(DRAFT)
+  organizerId String      @map("organize_id") @db.Uuid
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @default(now()) @map("updated_at")
+
+  organizer User     @relation(fields: [organizerId], references: [id])
+  tickets   Ticket[]
+
+  @@map("events")
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+
+  @@map("event_status")
+}
