@@ -1,0 +1,23 @@
+# Docker Compose - EventFlow Development Environment
+
+services:
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE: auth-service
+    container_name: eventflowapp-auth-service
+    ports:
+      - '3000:3000'
+    environment:
+      - PORT=3000
+      - KAFKA_BROKER=${KAFKA_BROKER}
+      - JWT_SECRET=${JWT_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
